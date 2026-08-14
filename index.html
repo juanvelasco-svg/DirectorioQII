@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Química II — Índice del Curso · 13 Capítulos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.183/build/three.module.js" } }
+</script>
+
+<style>
+  :root{
+    --void-black:#050508;
+    --void-dark:#0A0A0F;
+    --neon-cyan:#00D4FF;
+    --neon-blue:#4D9FFF;
+    --neon-soft:#9DC4FF;
+    --ink-soft:rgba(255,255,255,0.7);
+    --ink-mute:rgba(255,255,255,0.5);
+    --ink-faint:rgba(255,255,255,0.3);
+    --hairline:rgba(255,255,255,0.08);
+    --ease-quiet:cubic-bezier(.22,1,.36,1);
+    --ease-precise:cubic-bezier(.4,0,.2,1);
+    --ease-emphasis:cubic-bezier(.16,1,.3,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--void-black);color:#fff;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body{cursor:none;}
+  a,button{cursor:none;color:inherit;text-decoration:none;}
+
+  ::selection{background:var(--neon-cyan);color:var(--void-black);}
+
+  /* ===== Particle canvas ===== */
+  #particle-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+  /* ===== Custom cursor ===== */
+  #custom-cursor{
+    position:fixed;top:0;left:0;width:12px;height:12px;
+    border-radius:50%;background:#fff;mix-blend-mode:difference;
+    pointer-events:none;z-index:9999;will-change:transform;
+    transition:width .3s var(--ease-quiet), height .3s var(--ease-quiet), opacity .3s var(--ease-quiet);
+  }
+  @media (hover:none),(pointer:coarse){
+    #custom-cursor{display:none!important;}
+    body,a,button{cursor:auto;}
+  }
+
+  /* ===== Top nav ===== */
+  .top-nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:1.5rem 2.5rem;
+    display:flex;align-items:center;justify-content:space-between;
+    mix-blend-mode:difference;
+  }
+  .top-nav .brand{
+    display:flex;align-items:center;gap:0.85rem;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#fff;
+  }
+  .top-nav .brand .dot{width:8px;height:8px;background:var(--neon-cyan);border-radius:50%;}
+  .top-nav .nav-meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.7);
+    display:flex;gap:2.5rem;
+  }
+  .top-nav .nav-meta span:last-child{color:var(--neon-cyan);}
+
+  @media(max-width:768px){
+    .top-nav{padding:1.1rem 1.5rem;}
+    .top-nav .nav-meta{display:none;}
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;z-index:2;
+    min-height:100vh;
+    padding:8rem 2.5rem 4rem;
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:4rem;
+    align-items:center;
+    max-width:1600px;
+    margin:0 auto;
+  }
+  .hero-left .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--neon-cyan);
+    display:flex;align-items:center;gap:0.9rem;
+    margin-bottom:2rem;
+  }
+  .hero-left .eyebrow .bar{display:inline-block;width:40px;height:1px;background:var(--neon-cyan);}
+
+  .hero-title{
+    font-family:'Montserrat',sans-serif;
+    font-weight:900;
+    font-size:clamp(3.2rem,8vw,7rem);
+    line-height:0.88;
+    letter-spacing:-0.025em;
+    color:#fff;
+    margin-bottom:1.6rem;
+  }
+  .hero-title .accent{color:var(--neon-cyan);}
+  .hero-title .roman{
+    font-family:'Montserrat',sans-serif;font-weight:800;
+    -webkit-text-stroke:1.5px var(--neon-cyan);color:transparent;
+  }
+
+  .hero-sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:3rem;
+    display:flex;gap:1.2rem;flex-wrap:wrap;
+  }
+  .hero-sub .pipe{color:var(--neon-cyan);}
+
+  .manifesto{
+    max-width:540px;
+    border-left:1px solid var(--hairline);
+    padding-left:1.6rem;
+  }
+  .manifesto-text{
+    font-family:'Inter',sans-serif;font-weight:400;
+    font-size:1.05rem;line-height:1.65;color:var(--ink-soft);
+  }
+  .manifesto-text .word{
+    display:inline-block;opacity:0;
+    filter:blur(12px) brightness(30%);
+    will-change:filter,opacity;
+  }
+
+  .hero-cta{
+    margin-top:3rem;
+    display:flex;gap:1rem;flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:0.75rem;
+    padding:1rem 1.6rem;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+    border:1px solid rgba(255,255,255,0.2);
+    background:transparent;color:#fff;
+    transition:all 0.4s var(--ease-quiet);
+  }
+  .btn:hover{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,212,255,0.04);}
+  .btn.primary{background:var(--neon-cyan);color:var(--void-black);border-color:var(--neon-cyan);}
+  .btn.primary:hover{background:#fff;border-color:#fff;color:var(--void-black);}
+  .btn .arrow{display:inline-block;transition:transform 0.4s var(--ease-quiet);}
+  .btn:hover .arrow{transform:translateX(4px);}
+
+  /* Cube stage */
+  .hero-right{
+    position:relative;
+    height:60vh;min-height:480px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #cube-canvas{width:100%;height:100%;display:block;}
+  .cube-frame{
+    position:absolute;inset:0;pointer-events:none;
+  }
+  .cube-frame .corner{
+    position:absolute;width:32px;height:32px;
+    border:1px solid var(--neon-cyan);
+  }
+  .cube-frame .corner.tl{top:0;left:0;border-right:none;border-bottom:none;}
+  .cube-frame .corner.tr{top:0;right:0;border-left:none;border-bottom:none;}
+  .cube-frame .corner.bl{bottom:0;left:0;border-right:none;border-top:none;}
+  .cube-frame .corner.br{bottom:0;right:0;border-left:none;border-top:none;}
+  .cube-frame .label{
+    position:absolute;bottom:-2rem;left:0;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--ink-mute);
+  }
+  .cube-frame .label span{color:var(--neon-cyan);}
+
+  @media(max-width:1024px){
+    .hero{grid-template-columns:1fr;gap:3rem;padding-top:7rem;}
+    .hero-right{height:50vh;min-height:380px;}
+  }
+  @media(max-width:768px){
+    .hero{padding:6rem 1.5rem 3rem;}
+  }
+
+  /* ===== Section heads shared ===== */
+  .section-head{
+    padding:8rem 2.5rem 4rem;
+    max-width:1600px;margin:0 auto;
+    position:relative;z-index:2;
+  }
+  .section-head .meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--neon-cyan);
+    display:flex;align-items:center;gap:0.9rem;
+    margin-bottom:1.6rem;
+  }
+  .section-head .meta .bar{display:inline-block;width:40px;height:1px;background:var(--neon-cyan);}
+  .section-head h2{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:clamp(2.4rem,5.5vw,4.6rem);
+    line-height:0.9;letter-spacing:-0.025em;
+    max-width:900px;
+  }
+  .section-head .lead{
+    margin-top:1.8rem;
+    font-size:1.05rem;line-height:1.6;color:var(--ink-soft);
+    max-width:620px;
+  }
+  @media(max-width:768px){
+    .section-head{padding:6rem 1.5rem 3rem;}
+  }
+
+  /* ===== Logo block ===== */
+  .logo-block{
+    position:relative;z-index:2;
+    padding:6rem 2.5rem;
+    max-width:1600px;margin:0 auto;
+    display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:center;
+    border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);
+  }
+  .logo-block .logo-wrap{
+    display:flex;justify-content:center;align-items:center;
+    position:relative;
+  }
+  .logo-block .logo-wrap::before{
+    content:'';position:absolute;width:280px;height:280px;
+    border:1px solid rgba(0,212,255,0.15);border-radius:50%;
+    animation:spin 40s linear infinite;
+  }
+  .logo-block .logo-wrap::after{
+    content:'';position:absolute;width:340px;height:340px;
+    border:1px dashed rgba(0,212,255,0.08);border-radius:50%;
+    animation:spin 60s linear infinite reverse;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .logo-block img.logo{
+    width:240px;height:auto;position:relative;z-index:2;
+    filter:drop-shadow(0 0 30px rgba(0,212,255,0.25));
+  }
+  .logo-block .logo-text h3{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:clamp(2rem,4vw,3rem);
+    line-height:0.95;letter-spacing:-0.02em;
+    margin-bottom:1rem;
+  }
+  .logo-block .logo-text h3 span{color:var(--neon-cyan);}
+  .logo-block .logo-text .tagline{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--ink-mute);margin-bottom:2rem;
+  }
+  .logo-block .logo-text p{
+    font-size:1rem;line-height:1.65;color:var(--ink-soft);max-width:520px;
+  }
+  .logo-block .logo-text .pillars{
+    margin-top:2.5rem;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+    border-top:1px solid var(--hairline);padding-top:2rem;
+  }
+  .logo-block .logo-text .pillars .pillar{
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .logo-block .logo-text .pillars .pillar .n{
+    font-size:11px;letter-spacing:0.2em;color:var(--neon-cyan);margin-bottom:0.5rem;
+  }
+  .logo-block .logo-text .pillars .pillar .t{
+    font-size:13px;color:#fff;letter-spacing:0.06em;
+  }
+  @media(max-width:1024px){
+    .logo-block{grid-template-columns:1fr;gap:3rem;text-align:center;}
+    .logo-block .logo-text .pillars{grid-template-columns:1fr 1fr 1fr;text-align:left;}
+  }
+  @media(max-width:640px){
+    .logo-block{padding:4rem 1.5rem;}
+    .logo-block .logo-text .pillars{grid-template-columns:1fr;gap:1rem;}
+    .logo-block .logo-wrap::before{width:220px;height:220px;}
+    .logo-block .logo-wrap::after{width:270px;height:270px;}
+    .logo-block img.logo{width:190px;}
+  }
+
+  /* ===== Chapter grid ===== */
+  .chapters-section{
+    position:relative;z-index:2;
+    padding-bottom:8rem;
+  }
+  .chapter-grid{
+    max-width:1600px;margin:0 auto;
+    padding:0 2.5rem;
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--hairline);
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+  }
+  .chapter-card{
+    position:relative;
+    background:var(--void-black);
+    padding:2.5rem 2rem;
+    min-height:340px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    transition:background 0.5s var(--ease-quiet);
+    overflow:hidden;
+  }
+  .chapter-card::before{
+    content:'';position:absolute;left:0;top:0;width:2px;height:0;
+    background:var(--neon-cyan);
+    transition:height 0.6s var(--ease-quiet);
+  }
+  .chapter-card:hover{background:var(--void-dark);}
+  .chapter-card:hover::before{height:100%;}
+
+  .chapter-card .top{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:3rem;
+  }
+  .chapter-card .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.22em;color:var(--neon-cyan);
+  }
+  .chapter-card .num .of{color:var(--ink-faint);}
+  .chapter-card .status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+    padding:0.35rem 0.7rem;
+    border:1px solid var(--hairline);
+    color:var(--ink-mute);
+  }
+  .chapter-card .status.live{color:var(--neon-cyan);border-color:rgba(0,212,255,0.4);}
+  .chapter-card .status.soon{color:var(--ink-faint);}
+
+  .chapter-card h3{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:1.6rem;line-height:1.05;letter-spacing:-0.02em;
+    margin-bottom:1rem;
+    transition:color 0.4s var(--ease-quiet);
+  }
+  .chapter-card:hover h3{color:var(--neon-cyan);}
+  .chapter-card .desc{
+    font-size:0.92rem;line-height:1.55;color:var(--ink-mute);
+    margin-bottom:2rem;
+    transition:color 0.4s var(--ease-quiet);
+  }
+  .chapter-card:hover .desc{color:var(--ink-soft);}
+
+  .chapter-card .footer-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:1.5rem;border-top:1px solid var(--hairline);
+  }
+  .chapter-card .footer-row .enter{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    color:#fff;
+    display:flex;align-items:center;gap:0.6rem;
+    transition:color 0.4s var(--ease-quiet),gap 0.4s var(--ease-quiet);
+  }
+  .chapter-card:hover .footer-row .enter{color:var(--neon-cyan);gap:1rem;}
+  .chapter-card .footer-row .enter .arrow{
+    display:inline-block;width:14px;height:1px;background:currentColor;position:relative;
+    transition:width 0.4s var(--ease-quiet);
+  }
+  .chapter-card .footer-row .enter .arrow::after{
+    content:'';position:absolute;right:0;top:-3px;width:6px;height:6px;
+    border-top:1px solid currentColor;border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+  .chapter-card:hover .footer-row .enter .arrow{width:22px;}
+  .chapter-card .footer-row .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+
+  /* big number bg */
+  .chapter-card .bignum{
+    position:absolute;right:1rem;bottom:0.5rem;
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:8rem;line-height:1;
+    color:rgba(255,255,255,0.025);
+    pointer-events:none;
+    transition:color 0.5s var(--ease-quiet);
+  }
+  .chapter-card:hover .bignum{color:rgba(0,212,255,0.06);}
+
+  @media(max-width:1024px){
+    .chapter-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:640px){
+    .chapter-grid{grid-template-columns:1fr;padding:0 1.5rem;}
+    .chapter-card{min-height:auto;padding:2rem 1.5rem;}
+  }
+
+  /* ===== Lab image editorial ===== */
+  .lab-section{
+    position:relative;z-index:2;
+    margin:8rem auto;
+    max-width:1600px;
+    padding:0 2.5rem;
+  }
+  .lab-frame{
+    position:relative;
+    border:1px solid var(--hairline);
+    overflow:hidden;
+  }
+  .lab-frame img.lab{
+    width:100%;height:auto;display:block;
+    filter:grayscale(0.2) contrast(1.05) brightness(0.85);
+    transition:filter 0.8s var(--ease-quiet),transform 1.2s var(--ease-quiet);
+  }
+  .lab-frame:hover img.lab{
+    filter:grayscale(0) contrast(1.1) brightness(0.95);
+    transform:scale(1.02);
+  }
+  .lab-frame .overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(5,5,8,0.4) 0%, rgba(5,5,8,0.1) 40%, rgba(5,5,8,0.85) 100%);
+    pointer-events:none;
+  }
+  .lab-frame .corner{
+    position:absolute;width:36px;height:36px;
+    border:1px solid var(--neon-cyan);
+  }
+  .lab-frame .corner.tl{top:1rem;left:1rem;border-right:none;border-bottom:none;}
+  .lab-frame .corner.tr{top:1rem;right:1rem;border-left:none;border-bottom:none;}
+  .lab-frame .corner.bl{bottom:1rem;left:1rem;border-right:none;border-top:none;}
+  .lab-frame .corner.br{bottom:1rem;right:1rem;border-left:none;border-top:none;}
+
+  .lab-frame .caption{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:2.5rem 3rem;
+    display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;
+  }
+  .lab-frame .caption .quote{
+    font-family:'Montserrat',sans-serif;font-weight:800;
+    font-size:clamp(1.4rem,3vw,2.4rem);
+    line-height:1.1;letter-spacing:-0.02em;
+    max-width:780px;
+  }
+  .lab-frame .caption .quote span{color:var(--neon-cyan);}
+  .lab-frame .caption .meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--ink-mute);
+    text-align:right;
+    line-height:1.8;
+  }
+  .lab-frame .caption .meta span{color:var(--neon-cyan);}
+
+  .lab-section .lab-stats{
+    margin-top:2.5rem;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+  }
+  .lab-section .lab-stats .stat{
+    padding:2rem 1.5rem;
+    border-right:1px solid var(--hairline);
+  }
+  .lab-section .lab-stats .stat:last-child{border-right:none;}
+  .lab-section .lab-stats .stat .n{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:clamp(1.8rem,3.5vw,2.6rem);
+    line-height:1;letter-spacing:-0.02em;
+    color:var(--neon-cyan);
+    margin-bottom:0.6rem;
+  }
+  .lab-section .lab-stats .stat .l{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--ink-mute);
+  }
+
+  @media(max-width:1024px){
+    .lab-frame .caption{grid-template-columns:1fr;gap:1rem;}
+    .lab-frame .caption .meta{text-align:left;}
+    .lab-section .lab-stats{grid-template-columns:repeat(2,1fr);}
+    .lab-section .lab-stats .stat:nth-child(2){border-right:none;}
+    .lab-section .lab-stats .stat:nth-child(3),.lab-section .lab-stats .stat:nth-child(4){border-top:1px solid var(--hairline);}
+  }
+  @media(max-width:640px){
+    .lab-section{padding:0 1.5rem;margin:5rem auto;}
+    .lab-frame .caption{padding:1.5rem;}
+    .lab-section .lab-stats{grid-template-columns:1fr;}
+    .lab-section .lab-stats .stat{border-right:none;border-bottom:1px solid var(--hairline);}
+    .lab-section .lab-stats .stat:last-child{border-bottom:none;}
+  }
+
+  /* ===== Sequence note ===== */
+  .sequence-note{
+    max-width:1600px;margin:6rem auto;padding:0 2.5rem;
+    display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:start;
+    position:relative;z-index:2;
+  }
+  .sequence-note .marker{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--neon-cyan);
+    padding-top:0.4rem;
+  }
+  .sequence-note .body{
+    font-size:1rem;line-height:1.7;color:var(--ink-soft);
+    max-width:780px;
+    border-left:1px solid var(--hairline);padding-left:2rem;
+  }
+  .sequence-note .body code{
+    font-family:'IBM Plex Mono',monospace;font-size:0.88em;
+    background:rgba(0,212,255,0.08);color:var(--neon-cyan);
+    padding:0.1rem 0.5rem;border-radius:2px;
+  }
+  @media(max-width:640px){
+    .sequence-note{grid-template-columns:1fr;padding:0 1.5rem;gap:1.5rem;}
+    .sequence-note .body{padding-left:1.2rem;}
+  }
+
+  /* ===== Footer ===== */
+  footer{
+    position:relative;z-index:2;
+    padding:6rem 2.5rem 3rem;
+    border-top:1px solid var(--hairline);
+    max-width:1600px;margin:0 auto;
+  }
+  footer .grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:3rem;
+    margin-bottom:5rem;
+  }
+  footer .grid h4{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--ink-mute);margin-bottom:1.5rem;
+  }
+  footer .grid .col p,footer .grid .col li{
+    font-size:0.92rem;line-height:1.7;color:var(--ink-soft);list-style:none;
+  }
+  footer .grid .col li a{transition:color 0.3s;}
+  footer .grid .col li a:hover{color:var(--neon-cyan);}
+  footer .grid .col.brand .big{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:1.6rem;line-height:1;letter-spacing:-0.02em;margin-bottom:1rem;
+  }
+  footer .grid .col.brand .big span{color:var(--neon-cyan);}
+  footer .grid .col.brand p{max-width:380px;}
+
+  footer .bottom{
+    padding-top:2rem;border-top:1px solid var(--hairline);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  footer .bottom .right{display:flex;gap:1.5rem;}
+  footer .bottom .right span{color:var(--neon-cyan);}
+
+  @media(max-width:1024px){
+    footer .grid{grid-template-columns:1fr 1fr;}
+    footer .grid .col.brand{grid-column:1 / -1;}
+  }
+  @media(max-width:640px){
+    footer{padding:4rem 1.5rem 2rem;}
+    footer .grid{grid-template-columns:1fr;gap:2rem;}
+  }
+
+  /* ===== Loader ===== */
+  #loader{
+    position:fixed;inset:0;z-index:10000;
+    background:var(--void-black);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity 0.8s var(--ease-quiet), visibility 0.8s var(--ease-quiet);
+  }
+  #loader.hidden{opacity:0;visibility:hidden;}
+  #loader .l-num{
+    font-family:'Montserrat',sans-serif;font-weight:900;
+    font-size:5rem;line-height:1;letter-spacing:-0.03em;
+    color:var(--neon-cyan);
+  }
+  #loader .l-meta{
+    margin-top:1.2rem;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--ink-mute);
+  }
+  #loader .l-bar{
+    margin-top:2rem;width:200px;height:1px;background:var(--hairline);position:relative;overflow:hidden;
+  }
+  #loader .l-bar::after{
+    content:'';position:absolute;left:0;top:0;height:100%;background:var(--neon-cyan);
+    animation:load 1.8s var(--ease-quiet) forwards;
+  }
+  @keyframes load{from{width:0;}to{width:100%;}}
+
+  /* ===== Reveal animations ===== */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 1s var(--ease-quiet),transform 1s var(--ease-quiet);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-card{opacity:0;transform:translateY(40px);transition:opacity 0.9s var(--ease-quiet),transform 0.9s var(--ease-quiet);}
+  .reveal-card.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
+    .reveal,.reveal-card{opacity:1;transform:none;}
+    .manifesto-text .word{opacity:1!important;filter:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="l-num">QII</div>
+  <div class="l-meta">Cargando índice · 13 capítulos</div>
+  <div class="l-bar"></div>
+</div>
+
+<!-- Custom cursor -->
+<div id="custom-cursor"></div>
+
+<!-- Particle background -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>QUÍMICA II / ÍNDICE</span>
+  </div>
+  <div class="nav-meta">
+    <span>PROGRAMA 2025</span>
+    <span>13 CLASES</span>
+    <span>V1.0</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="eyebrow"><span class="bar"></span>Curso Universitario · Programa Académico</p>
+    <h1 class="hero-title">
+      QUÍMICA<br>
+      <span class="roman">II</span> <span class="accent">/</span> Índice
+    </h1>
+    <p class="hero-sub">
+      <span>13 capítulos</span>
+      <span class="pipe">/</span>
+      <span>13 clases</span>
+      <span class="pipe">/</span>
+      <span>Secuencia numérica</span>
+      <span class="pipe">/</span>
+      <span>Innovación para el bienestar</span>
+    </p>
+    <div class="manifesto">
+      <p class="manifesto-text" id="manifesto-text">La materia se organiza en enlaces, energías y equilibrios. Trece capítulos para atravesar la química desde el orbital hasta el polímero, desde el protón hasta el catalizador. Esta no es una introducción: es un sistema. Avanza en orden. Cada clase presupone la anterior.</p>
+    </div>
+    <div class="hero-cta">
+      <a href="#chapters" class="btn primary">
+        <span>Comenzar índice</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#lab" class="btn">
+        <span>Ver programa</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="cube-frame">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+      <div class="label">MODELO MOLECULAR / <span>6 CARAS</span></div>
+    </div>
+    <canvas id="cube-canvas"></canvas>
+  </div>
+</section>
+
+<!-- LOGO BLOCK -->
+<section class="logo-block reveal">
+  <div class="logo-wrap">
+    <img class="logo" src="https://z-cdn-media.chatglm.cn/files/d2052727-c7c9-4278-94f6-a038c14a6111.?auth_key=1886719975-50ac414445a14d99a462fc4af055302c-0-f08f74bf8ae3d28d24e4ebb85c50987d" alt="Logo Química II">
+  </div>
+  <div class="logo-text">
+    <h3>QUÍMICA <span>II</span></h3>
+    <p class="tagline">Innovación para el bienestar</p>
+    <p>El programa integra los símbolos del laboratorio — el ADN, el mortero, la serpiente caduceo, las hojas vegetales — porque la química contemporánea ya no se entiende sin la biología, sin la farmacología, sin la responsabilidad ambiental. El logo es un mapa de esas convergencias.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="n">01</div>
+        <div class="t">Teoría + Laboratorio</div>
+      </div>
+      <div class="pillar">
+        <div class="n">02</div>
+        <div class="t">Cálculo + Modelo</div>
+      </div>
+      <div class="pillar">
+        <div class="n">03</div>
+        <div class="t">Ciencia + Aplicación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section class="chapters-section" id="chapters">
+  <div class="section-head">
+    <p class="meta"><span class="bar"></span>Índice del curso · 13 capítulos</p>
+    <h2>Trece clases. Una secuencia.<br>Cada una presupone la anterior.</h2>
+    <p class="lead">Los enlaces a las clases 01–07 ya están publicados. Las clases 08–13 siguen la misma estructura URL <code style="font-family:'IBM Plex Mono',monospace;background:rgba(0,212,255,0.08);color:var(--neon-cyan);padding:0.1rem 0.5rem;font-size:0.85em;">QIIClaseN/</code> y se activarán conforme se suban al repositorio.</p>
+  </div>
+
+  <div class="chapter-grid" id="chapter-grid">
+    <!-- generated by JS -->
+  </div>
+</section>
+
+<!-- SEQUENCE NOTE -->
+<div class="sequence-note">
+  <div class="marker">NOTA / 01</div>
+  <div class="body">
+    La secuencia numérica es estricta. Cada clase se publica en <code>https://juanvelasco-svg.github.io/QIIClaseN/</code> donde <code>N</code> corresponde al número de capítulo. Las clases 1 a 7 ya están disponibles. Las clases 8 a 13 se cargarán siguiendo el mismo patrón de URL — el índice quedará activo automáticamente cuando subas cada carpeta al repositorio <code>juanvelasco-svg.github.io</code>.
+  </div>
+</div>
+
+<!-- LAB SECTION -->
+<section class="lab-section" id="lab">
+  <div class="lab-frame">
+    <img class="lab" src="https://z-cdn-media.chatglm.cn/files/d4275cd9-665d-4342-b8ed-b785b753abc5.?auth_key=1886719975-50da4efcd5bf4ac8a8f8ed5a359e5c80-0-9bd07b0d02d6cac23e3c65def92a7a78" alt="Laboratorio de Química II">
+    <div class="overlay"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="caption">
+      <p class="quote">PV = RT · ΔG = ΔH − TΔS · q = mcΔT · pH = −log[H⁺] <span>— el laboratorio es donde la fórmula se vuelve materia.</span></p>
+      <div class="meta">
+        Sesión de laboratorio<br>
+        <span>Química II · 2025</span><br>
+        Proceso: estado sólido → líquido → gas
+      </div>
+    </div>
+  </div>
+
+  <div class="lab-stats">
+    <div class="stat">
+      <div class="n">13</div>
+      <div class="l">Capítulos</div>
+    </div>
+    <div class="stat">
+      <div class="n">7</div>
+      <div class="l">Clases publicadas</div>
+    </div>
+    <div class="stat">
+      <div class="n">6</div>
+      <div class="l">En programación</div>
+    </div>
+    <div class="stat">
+      <div class="n">∞</div>
+      <div class="l">Aplicaciones</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="grid">
+    <div class="col brand">
+      <p class="big">QUÍMICA <span>II</span></p>
+      <p>Programa académico de química universitaria. Trece capítulos en secuencia estricta. Innovación para el bienestar.</p>
+    </div>
+    <div class="col">
+      <h4>Índice</h4>
+      <ul>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase1/">Clase 01 · Nomenclatura</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase2/">Clase 02 · Estructura atómica</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase3/">Clase 03 · Tabla periódica</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase4/">Clase 04 · Enlace químico</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4>Continuación</h4>
+      <ul>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase5/">Clase 05 · Fuerzas intermoleculares</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase6/">Clase 06 · Estequiometría</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase7/">Clase 07 · Reacciones</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase8/">Clase 08 · Termoquímica</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4>Cierre</h4>
+      <ul>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase9/">Clase 09 · Cinética</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase10/">Clase 10 · Equilibrio</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase11/">Clase 11 · Ácidos y bases</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase12/">Clase 12 · Electroquímica</a></li>
+        <li><a href="https://juanvelasco-svg.github.io/QIIClase13/">Clase 13 · Química orgánica</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="left">© 2025 · Química II · Índice del curso</div>
+    <div class="right">
+      <span>GitHub Pages</span>
+      <span>·</span>
+      <span>V1.0</span>
+      <span>·</span>
+      <span>Innovación para el bienestar</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ SCRIPTS ============ -->
+<script>
+  /* ===== Chapter data ===== */
+  const chapters = [
+    { n:1, title:'Nomenclatura y conceptos básicos', desc:'Repaso de compuestos inorgánicos, óxidos, ácidos, bases y sales. Notación IUPAC y convenciones históricas que aparecen en laboratorio.', url:'https://juanvelasco-svg.github.io/QIIClase1/', status:'live', tag:'Fundamentos' },
+    { n:2, title:'Estructura atómica', desc:'Modelo cuántico del átomo. Números cuánticos, orbitales, configuración electrónica y principio de Auf Hund. La base para entender el enlace.', url:'https://juanvelasco-svg.github.io/QIIClase2/', status:'live', tag:'Modelo atómico' },
+    { n:3, title:'Tabla periódica y propiedades', desc:'Organización periódica, propiedades atómicas y su variación: radio, electronegatividad, energía de ionización, afinidad electrónica.', url:'https://juanvelasco-svg.github.io/QIIClase3/', status:'live', tag:'Clasificación' },
+    { n:4, title:'Enlace químico', desc:'Enlaces iónico, covalente y metálico. Estructuras de Lewis, geometría molecular, hibridación y polaridad de enlaces.', url:'https://juanvelasco-svg.github.io/QIIClase4/', status:'live', tag:'Enlace' },
+    { n:5, title:'Fuerzas intermoleculares', desc:'Dipolo-dipolo, fuerzas de London, puente de hidrógeno. Estados de la materia y diagramas de fase.', url:'https://juanvelasco-svg.github.io/QIIClase5/', status:'live', tag:'Estados' },
+    { n:6, title:'Estequiometría', desc:'Mol, masa molar, composición centesimal, fórmulas empíricas y moleculares. Cálculos con reacciones: reactivo limitante y rendimiento.', url:'https://juanvelasco-svg.github.io/QIIClase6/', status:'live', tag:'Cálculo' },
+    { n:7, title:'Reacciones químicas', desc:'Tipos de reacciones, balanceo por método del ion-electrón, ecuaciones iónicas netas y predicción de productos.', url:'https://juanvelasco-svg.github.io/QIIClase7/', status:'live', tag:'Reacciones' },
+    { n:8, title:'Termoquímica', desc:'Calor de reacción, entalpía, entropía y energía libre de Gibbs. Ley de Hess y cálculo energético de procesos químicos.', url:'https://juanvelasco-svg.github.io/QIIClase8/', status:'soon', tag:'Energía' },
+    { n:9, title:'Cinética química', desc:'Velocidad de reacción, leyes de velocidad, teoría de colisiones, mecanismos y catálisis. Factores que afectan la rapidez.', url:'https://juanvelasco-svg.github.io/QIIClase9/', status:'soon', tag:'Velocidad' },
+    { n:10, title:'Equilibrio químico', desc:'Constante de equilibrio Kc y Kp, principio de Le Chatelier, cociente de reacción y desplazamiento del equilibrio.', url:'https://juanvelasco-svg.github.io/QIIClase10/', status:'soon', tag:'Equilibrio' },
+    { n:11, title:'Ácidos y bases', desc:'Teorías de Arrhenius, Brønsted-Lowry y Lewis. pH, pOH, hidrólisis, amortiguadores y valoraciones ácido-base.', url:'https://juanvelasco-svg.github.io/QIIClase11/', status:'soon', tag:'pH' },
+    { n:12, title:'Electroquímica', desc:'Celdas galvánicas y electrolíticas, potencial de reducción, ecuación de Nernst, electrólisis y corrosión.', url:'https://juanvelasco-svg.github.io/QIIClase12/', status:'soon', tag:'Electrones' },
+    { n:13, title:'Introducción a la química orgánica', desc:'Hidrocarburos, grupos funcionales, isomería y nomenclatura orgánica. Fundamentos para bioquímica y polímeros.', url:'https://juanvelasco-svg.github.io/QIIClase13/', status:'soon', tag:'Carbono' }
+  ];
+
+  /* ===== Render chapter cards ===== */
+  const grid = document.getElementById('chapter-grid');
+  chapters.forEach((c,i) => {
+    const card = document.createElement('a');
+    card.className = 'chapter-card reveal-card';
+    card.href = c.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.style.transitionDelay = `${(i%3)*0.08}s`;
+    card.innerHTML = `
+      <div class="bignum">${String(c.n).padStart(2,'0')}</div>
+      <div class="top">
+        <div class="num">${String(c.n).padStart(2,'0')} <span class="of">/ 13</span></div>
+        <div class="status ${c.status}">${c.status === 'live' ? '● Disponible' : '○ En proceso'}</div>
+      </div>
+      <div>
+        <h3>${c.title}</h3>
+        <p class="desc">${c.desc}</p>
+      </div>
+      <div class="footer-row">
+        <span class="enter">Entrar <span class="arrow"></span></span>
+        <span class="tag">${c.tag}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  /* ===== Loader ===== */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1800);
+  });
+
+  /* ===== Custom cursor ===== */
+  (function(){
+    if (window.matchMedia('(pointer:coarse)').matches) return;
+    const cur = document.getElementById('custom-cursor');
+    const target = {x:0,y:0}, pos = {x:0,y:0};
+    let hover = false;
+    addEventListener('mousemove', e => { target.x = e.clientX; target.y = e.clientY; });
+    addEventListener('mouseover', e => {
+      const t = e.target;
+      hover = !!(t.closest && t.closest('a,button,.chapter-card,[data-cursor-hover]'));
+    });
+    function loop(){
+      pos.x += (target.x - pos.x) * 0.18;
+      pos.y += (target.y - pos.y) * 0.18;
+      const s = hover ? 48 : 12;
+      cur.style.transform = `translate(${pos.x - s/2}px, ${pos.y - s/2}px)`;
+      cur.style.width = cur.style.height = s + 'px';
+      cur.style.opacity = hover ? 0.55 : 1;
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ===== Reveal on scroll ===== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-card').forEach(el => io.observe(el));
+
+  /* ===== Manifesto scrub blur ===== */
+  document.fonts.ready.then(() => {
+    const textEl = document.getElementById('manifesto-text');
+    if (!textEl) return;
+    const words = textEl.textContent.trim().split(/\s+/);
+    textEl.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
+
+    if (window.gsap && window.ScrollTrigger){
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.timeline({
+        scrollTrigger:{
+          trigger:'.manifesto',
+          start:'top 85%',
+          end:'bottom 55%',
+          scrub:true,
+        }
+      }).fromTo('.manifesto-text .word',
+        { opacity:0, filter:'blur(12px) brightness(30%)' },
+        { opacity:1, filter:'blur(0px) brightness(100%)', stagger:0.04, ease:'sine.out' }
+      );
+    } else {
+      document.querySelectorAll('.manifesto-text .word').forEach(w => {
+        w.style.opacity = 1;
+        w.style.filter = 'none';
+      });
+    }
+  });
+</script>
+
+<!-- ===== Three.js: particle field + rotating cube ===== -->
+<script type="module">
+  import * as THREE from 'three';
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ PARTICLE FIELD ============ */
+  (function particleField(){
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 100);
+    camera.position.z = 8;
+
+    function makeLayer(count, color, sizeMul){
+      const positions = new Float32Array(count*3);
+      const sizes = new Float32Array(count);
+      const offsets = new Float32Array(count);
+      for (let i=0;i<count;i++){
+        positions[i*3]   = (Math.random()-0.5) * 22;
+        positions[i*3+1] = (Math.random()-0.5) * 14;
+        positions[i*3+2] = (Math.random()-0.5) * 12;
+        sizes[i]   = (Math.random() * 1.4 + 0.4) * sizeMul;
+        offsets[i] = Math.random() * Math.PI * 2;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
+      geo.setAttribute('aOffset',  new THREE.BufferAttribute(offsets, 1));
+      const mat = new THREE.ShaderMaterial({
+        uniforms:{ uTime:{value:0}, uColor:{value:new THREE.Color(color)} },
+        vertexShader:`
+          attribute float aSize; attribute float aOffset; uniform float uTime; varying float vAlpha;
+          void main(){
+            vec3 p = position;
+            p.y += sin(uTime*0.3 + aOffset) * 0.4;
+            p.x += cos(uTime*0.25 + aOffset*0.7) * 0.2;
+            vec4 mv = modelViewMatrix * vec4(p,1.0);
+            gl_PointSize = aSize * (180.0 / -mv.z);
+            gl_Position = projectionMatrix * mv;
+            vAlpha = 0.55 + 0.45 * sin(uTime*0.6 + aOffset);
+          }`,
+        fragmentShader:`
+          varying float vAlpha; uniform vec3 uColor;
+          void main(){
+            vec2 uv = gl_PointCoord - vec2(0.5);
+            if (length(uv) > 0.5) discard;
+            gl_FragColor = vec4(uColor, smoothstep(0.5,0.0,length(uv)) * vAlpha * 0.55);
+          }`,
+        transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+      });
+      const pts = new THREE.Points(geo, mat);
+      scene.add(pts);
+      return { mat, pts };
+    }
+
+    const isMobile = innerWidth < 768;
+    const layer1 = makeLayer(isMobile ? 600 : 1200, 0xffffff, 1.0);
+    const layer2 = makeLayer(isMobile ? 100 : 200, 0x00D4FF, 1.6);
+
+    const mouse = {x:0,y:0};
+    addEventListener('mousemove', e => {
+      mouse.x = (e.clientX / innerWidth - 0.5) * 2;
+      mouse.y = (e.clientY / innerHeight - 0.5) * 2;
+    });
+
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold:0 });
+    io.observe(canvas);
+
+    const clock = new THREE.Clock();
+    function tick(){
+      requestAnimationFrame(tick);
+      if (!visible || prefersReduced) return;
+      const t = clock.getElapsedTime();
+      layer1.mat.uniforms.uTime.value = t;
+      layer2.mat.uniforms.uTime.value = t;
+      scene.rotation.y += (mouse.x * 0.15 - scene.rotation.y) * 0.04;
+      scene.rotation.x += (-mouse.y * 0.1 - scene.rotation.x) * 0.04;
+      renderer.render(scene, camera);
+    }
+    tick();
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  })();
+
+  /* ============ ROTATING CUBE ============ */
+  (function rotatingCube(){
+    const canvas = document.getElementById('cube-canvas');
+    if (!canvas) return;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = r.width / r.height;
+      camera.updateProjectionMatrix();
+    }
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    camera.position.set(0, 0, 6);
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0xffffff, 0.25);
+    scene.add(ambient);
+    const s1 = new THREE.SpotLight(0xffffff, 80, 0, 0.45, 1); s1.position.set(10, 10, 10); scene.add(s1);
+    const s2 = new THREE.SpotLight(0x9DC4FF, 40, 0, 0.45, 1); s2.position.set(-10, -10, -10); scene.add(s2);
+    const pl = new THREE.PointLight(0x00D4FF, 30, 100); pl.position.set(0, 0, 5); scene.add(pl);
+
+    // Canvas texture helper
+    function makeFaceTexture(symbol, sub, num){
+      const c = document.createElement('canvas');
+      c.width = c.height = 512;
+      const ctx = c.getContext('2d');
+      // bg
+      const grad = ctx.createLinearGradient(0,0,512,512);
+      grad.addColorStop(0, '#0A0A0F');
+      grad.addColorStop(1, '#050508');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,512,512);
+
+      // grid
+      ctx.strokeStyle = 'rgba(0,212,255,0.08)';
+      ctx.lineWidth = 1;
+      for (let i=0;i<=8;i++){
+        ctx.beginPath();
+        ctx.moveTo(i*64,0); ctx.lineTo(i*64,512); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0,i*64); ctx.lineTo(512,i*64); ctx.stroke();
+      }
+
+      // outer border
+      ctx.strokeStyle = 'rgba(0,212,255,0.5)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(24,24,464,464);
+
+      // corner ticks
+      ctx.strokeStyle = '#00D4FF';
+      ctx.lineWidth = 2;
+      const tk = 24;
+      [[40,40,1,1],[472,40,-1,1],[40,472,1,-1],[472,472,-1,-1]].forEach(([x,y,dx,dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(x, y); ctx.lineTo(x+tk*dx, y);
+        ctx.moveTo(x, y); ctx.lineTo(x, y+tk*dy);
+        ctx.stroke();
+      });
+
+      // top label
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.font = '500 18px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('QII / FACE', 56, 56);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#00D4FF';
+      ctx.fillText(String(num).padStart(2,'0'), 456, 56);
+
+      // main symbol
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 180px "Montserrat", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(symbol, 256, 250);
+
+      // sub text
+      ctx.fillStyle = 'rgba(0,212,255,0.85)';
+      ctx.font = '500 22px "IBM Plex Mono", monospace';
+      ctx.fillText(sub, 256, 370);
+
+      // bottom label
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.font = '500 14px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('QUÍMICA II', 56, 466);
+      ctx.textAlign = 'right';
+      ctx.fillText('INNOVACIÓN', 456, 466);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    const faces = [
+      { symbol:'H₂O', sub:'AGUA', num:1 },
+      { symbol:'CO₂', sub:'DIÓXIDO', num:2 },
+      { symbol:'pH',  sub:'POTENCIAL', num:3 },
+      { symbol:'ΔG',  sub:'ENERGÍA LIBRE', num:4 },
+      { symbol:'Kc',  sub:'EQUILIBRIO', num:5 },
+      { symbol:'c',   sub:'VELOCIDAD LUZ', num:6 },
+    ];
+
+    const materials = faces.map(f => new THREE.MeshStandardMaterial({
+      map: makeFaceTexture(f.symbol, f.sub, f.num),
+      roughness: 0.35, metalness: 0.2,
+      emissive: 0x001a22, emissiveIntensity: 0.4,
+    }));
+
+    const cube = new THREE.Mesh(new THREE.BoxGeometry(3, 3, 3), materials);
+    scene.add(cube);
+
+    // wireframe overlay
+    const wire = new THREE.LineSegments(
+      new THREE.EdgesGeometry(cube.geometry),
+      new THREE.LineBasicMaterial({ color: 0x00D4FF, transparent: true, opacity: 0.3 })
+    );
+    cube.add(wire);
+
+    // mouse parallax
+    const mouse = {x:0,y:0};
+    addEventListener('mousemove', e => {
+      const r = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      mouse.y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    });
+
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold:0 });
+    io.observe(canvas);
+
+    // priority loading
+    renderer.compile(scene, camera);
+    resize();
+
+    addEventListener('resize', resize);
+
+    let autoRotY = 0;
+    function tick(){
+      requestAnimationFrame(tick);
+      if (!visible || prefersReduced){
+        renderer.render(scene, camera);
+        return;
+      }
+      autoRotY += 0.005;
+      const tY = autoRotY + mouse.x * 0.4;
+      const tX = -mouse.y * 0.3 + Math.sin(autoRotY * 0.5) * 0.15;
+      cube.rotation.y += (tY - cube.rotation.y) * 0.08;
+      cube.rotation.x += (tX - cube.rotation.x) * 0.08;
+      renderer.render(scene, camera);
+    }
+    tick();
+  })();
+</script>
+
+</body>
+</html>
